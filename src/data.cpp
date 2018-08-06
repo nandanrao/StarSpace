@@ -119,6 +119,23 @@ void InternDataHandler::convert(
         }
       }
     } else
+    if (args_->trainMode == 6) {
+      // overall length
+      auto le = example.RHSTokens.size();
+      // grab section between length 1 and length N-1
+      auto si = rand() % (le - 2) + 1;
+      // start of section to grab
+      auto st = rand() % (le - si);
+      // iterate and sort into lsh/rhs
+      for (int i = 0; i < le; i++) {
+        auto tok = example.RHSTokens[i];
+        if ((i >= st) && (i <= st+si)) {
+          rslt.LHSTokens.push_back(tok);
+        } else {
+          rslt.RHSTokens.push_back(tok);
+        }
+      }
+    } else
     if (args_->trainMode == 3) {
       // pick two random labels, one as lhs and the other as rhs
       auto idx = rand() % example.RHSTokens.size();
@@ -249,7 +266,22 @@ void InternDataHandler::getRandomRHS(vector<Base>& results) const {
         results.push_back(ex.RHSTokens[i]);
       }
     }
-  } else {
+  }
+  else if (args_->trainMode == 6) {
+      // overall length
+      auto le = ex.RHSTokens.size();
+      // grab section between length 1 and length N-1
+      auto si = rand() % (le - 2) + 1;
+      // start of section to grab
+      auto st = rand() % (le - si);
+      // iterate and sort into lsh/rhs
+      for (int i = 0; i < le; i++) {
+        if ((i >= st) && (i <= st+si)) {
+          results.push_back(ex.RHSTokens[i]);
+        }
+      }
+  }
+  else {
     results.push_back(ex.RHSTokens[r]);
   }
 }
