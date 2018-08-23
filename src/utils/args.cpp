@@ -216,7 +216,7 @@ void Args::parseArgs(int argc, char** argv) {
     }
   }
   // check for trainMode
-  if ((trainMode < 0) || (trainMode > 5)) {
+  if ((trainMode < 0) || (trainMode > 6)) {
     cerr << "Uknown trainMode. We currently support the follow train modes:\n";
     cerr << "trainMode 0: at training time, one label from RHS is picked as true label; LHS is the same from input.\n";
     cerr << "trainMode 1: at training time, one label from RHS is picked as true label; LHS is the bag of the rest RHS labels.\n";

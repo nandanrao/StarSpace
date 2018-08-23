@@ -150,6 +150,22 @@ void LayerDataHandler::convert(
         }
       }
     } else
+    if (args_->trainMode == 6) {
+      // overall length
+      auto le = example.RHSTokens.size();
+      // grab section between length 1 and length N-1
+      auto si = rand() % (le - 2) + 1;
+      // start of section to grab
+      auto st = rand() % (le - si);
+      // iterate and sort into lsh/rhs
+      for (int i = 0; i < le; i++) {
+        if ((i >= st) && (i <= st+si)) {
+          insert(rslt.LHSTokens, example.RHSFeatures[i], args_->dropoutLHS);
+        } else {
+          insert(rslt.RHSTokens, example.RHSFeatures[i], args_->dropoutRHS);
+        }
+      }
+    } else
     if (args_->trainMode == 3) {
       // pick one random rhs as input
       auto idx = rand() % example.RHSFeatures.size();
@@ -191,6 +207,20 @@ void LayerDataHandler::getRandomRHS(vector<Base>& result) const {
         insert(result, ex.RHSFeatures[i], args_->dropoutRHS);
       }
     }
+  }
+  else if (args_->trainMode == 6) {
+      // overall length
+      auto le = ex.RHSTokens.size();
+      // grab section between length 1 and length N-1
+      auto si = rand() % (le - 2) + 1;
+      // start of section to grab
+      auto st = rand() % (le - si);
+      // iterate and sort into lsh/rhs
+      for (int i = 0; i < le; i++) {
+        if ((i >= st) && (i <= st+si)) {
+          insert(result, ex.RHSFeatures[i], args_->dropoutRHS);
+        }
+      }
   } else {
     insert(result, ex.RHSFeatures[r], args_->dropoutRHS);
   }
