@@ -1,10 +1,3 @@
-#
-# Copyright (c) Facebook, Inc. and its affiliates.
-#
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
-#
-
 CXX = g++
 CXXFLAGS = -pthread -std=gnu++11
 
@@ -15,11 +8,11 @@ OBJS = normalize.o dict.o args.o proj.o parser.o data.o model.o starspace.o doc_
 TESTS = matrix_test proj_test
 INCLUDES = -I$(BOOST_DIR)
 
-opt: CXXFLAGS += -O3 -funroll-loops
-opt: starspace
+opt: CXXFLAGS += -O3 -fPIC -funroll-loops
+opt: libstarspace.a
 
-debug: CXXFLAGS += -g -O0 -fno-inline
-debug: starspace
+debug: CXXFLAGS += -g -O0 -fPIC -fno-inline
+debug: libstarspace.a
 
 
 TEST_INCLUDES = -I$(GTEST_DIR)/include
@@ -96,7 +89,10 @@ doc_parser.o: dict.o src/doc_parser.cpp src/doc_parser.h
 starspace.o: src/starspace.cpp src/starspace.h
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -g -c src/starspace.cpp
 
-starspace: $(OBJS)
+libstarspace.a: $(OBJS)
+	ar rcs libstarspace.a $(OBJS)
+
+starspace:
 	$(CXX) $(CXXFLAGS) $(OBJS) $(INCLUDES) -g src/main.cpp -o starspace
 
 query_nn: $(OBJS)
