@@ -127,7 +127,7 @@ void StarSpace::initFromSavedModel(const string& filename) {
   initParser();
   initDataHandler();
 
-    loadBaseDocs();
+    // loadBaseDocs();
 }
 
 void StarSpace::initFromTsv(const string& filename) {
@@ -270,7 +270,7 @@ unordered_map<string, float> StarSpace::predictTags(const string& line, int k){
     predictOne(query_vec, predictions);
 
     unordered_map<string, float> umap;
-    
+
     for (int i = 0; i < predictions.size(); i++) {
       string tmp = printDocStr(baseDocs_[predictions[i].second]);
       umap[ tmp ] = predictions[i].first;
